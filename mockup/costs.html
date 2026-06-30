@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Coder · payments-service · Costs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <header class="commandbar">
+    <a class="brand" href="index.html"><span class="mark">A</span><span class="name"><b>AI</b>·Coder</span></a>
+    <div class="fleet">
+      <span class="stat"><span class="n">6</span><span class="lbl">projects</span></span>
+      <span class="stat live"><span class="n">2</span><span class="lbl">agents active</span></span>
+      <span class="stat alert"><span class="n">1</span><span class="lbl">needs you</span></span>
+      <span class="stat"><span class="n">$4.18</span><span class="lbl">spent today</span></span>
+    </div>
+    <span class="spacer"></span>
+    <a class="iconbtn" href="settings.html" title="Settings" aria-label="Settings">⚙</a>
+  </header>
+
+  <div class="shell">
+    <aside class="roster">
+      <div class="roster-head"><span class="eyebrow">Fleet</span><span class="add" title="Add project" role="button" tabindex="0">+</span></div>
+      <nav class="stations">
+        <a class="station is-current" href="index.html"><span class="lamp" data-state="working"></span><span class="who"><span class="repo">payments-service</span><span class="op working">authoring PR · 0:42<span class="cur"></span></span></span><span class="host">GH</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="reviewing"></span><span class="who"><span class="repo">marketing-site</span><span class="op reviewing">reviewing PR #54</span></span><span class="host">GL</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="attention"></span><span class="who"><span class="repo">internal-dashboard</span><span class="op attention">3 issues need you</span></span><span class="host">GH</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="clear"></span><span class="who"><span class="repo">mobile-api</span><span class="op idle">all clear</span></span><span class="host">GH</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="idle"></span><span class="who"><span class="repo">data-pipeline</span><span class="op idle">paused</span></span><span class="host">GL</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="clear"></span><span class="who"><span class="repo">docs-portal</span><span class="op idle">docs synced 2h ago</span></span><span class="host">GL</span></a>
+      </nav>
+      <div class="roster-foot"><span>6 stations</span><span>all hosts <b>online</b></span></div>
+    </aside>
+
+    <main class="console">
+      <div class="console-head">
+        <div class="crumb">fleet / payments-service / <span class="here">costs</span></div>
+        <div class="title-row">
+          <h1>payments-service</h1>
+          <span class="chip working"><span class="pip"></span>WORKING</span>
+          <span class="repo-path">github.com/acme/payments-service</span>
+        </div>
+        <p class="desc">What the agents have spent this month, by job and by model. The budget cap pauses the project automatically when reached.</p>
+        <nav class="tabs">
+          <a class="tab" href="index.html">Overview</a>
+          <a class="tab" href="issues.html">Issues<span class="ct">7</span></a>
+          <a class="tab" href="pulls.html">Pull requests<span class="ct">3</span></a>
+          <a class="tab is-active" href="costs.html">Costs</a>
+        </nav>
+      </div>
+
+      <div class="console-body">
+
+        <section class="instruments">
+          <div class="inst">
+            <div class="lbl">Spend · June</div>
+            <div class="val amber">$62.40</div>
+            <div class="meter"><div class="meter-fill" style="width:42%"></div></div>
+            <div class="sub">42% of $150 cap</div>
+          </div>
+          <div class="inst"><div class="lbl">Coding</div><div class="val">$41.10</div><div class="sub">66% of spend</div></div>
+          <div class="inst"><div class="lbl">Code review</div><div class="val">$13.80</div><div class="sub">22% of spend</div></div>
+          <div class="inst"><div class="lbl">Docs + architecture</div><div class="val">$7.50</div><div class="sub">12% of spend</div></div>
+        </section>
+
+        <div class="sect"><h2>By model role</h2><span class="rule"></span></div>
+        <div class="records">
+          <article class="rec">
+            <span class="num">code</span>
+            <span class="main">
+              <div class="h">claude-opus-4-8</div>
+              <div class="meta">coding agent · 312 requests · 4.2M tokens</div>
+              <div class="tags"><span class="tg ai">coding</span></div>
+            </span>
+            <span class="right"><span class="cost">$41.10</span>this month</span>
+          </article>
+          <article class="rec">
+            <span class="num">rev</span>
+            <span class="main">
+              <div class="h">claude-sonnet-4-6</div>
+              <div class="meta">review agent · 88 requests · 1.9M tokens</div>
+              <div class="tags"><span class="tg review">code review</span></div>
+            </span>
+            <span class="right"><span class="cost">$13.80</span>this month</span>
+          </article>
+          <article class="rec">
+            <span class="num">doc</span>
+            <span class="main">
+              <div class="h">claude-haiku-4-5</div>
+              <div class="meta">docs &amp; architecture agent · 54 requests · 1.1M tokens</div>
+              <div class="tags"><span class="tg">documentation</span><span class="tg">architecture</span></div>
+            </span>
+            <span class="right"><span class="cost">$7.50</span>this month</span>
+          </article>
+        </div>
+
+        <div class="sect" style="margin-top:26px"><h2>Daily spend · last 14 days</h2><span class="rule"></span></div>
+        <div style="display:flex;align-items:flex-end;gap:6px;height:120px;padding:8px 2px;font-family:var(--mono)">
+          <!-- lightweight mono bar chart -->
+          <div style="flex:1;height:28%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:46%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:38%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:62%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:54%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:33%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:71%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:48%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:80%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:58%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:44%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:67%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:52%;background:var(--ink-3);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+          <div style="flex:1;height:90%;background:rgba(246,181,63,.18);border-top:2px solid var(--working);border-radius:3px 3px 0 0"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

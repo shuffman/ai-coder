@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Coder · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <header class="commandbar">
+    <a class="brand" href="index.html"><span class="mark">A</span><span class="name"><b>AI</b>·Coder</span></a>
+    <div class="fleet">
+      <span class="stat"><span class="n">6</span><span class="lbl">projects</span></span>
+      <span class="stat live"><span class="n">2</span><span class="lbl">agents active</span></span>
+      <span class="stat alert"><span class="n">1</span><span class="lbl">needs you</span></span>
+      <span class="stat"><span class="n">$4.18</span><span class="lbl">spent today</span></span>
+    </div>
+    <span class="spacer"></span>
+    <a class="iconbtn is-active" href="settings.html" title="Settings" aria-label="Settings">⚙</a>
+  </header>
+
+  <div class="shell">
+    <aside class="roster">
+      <div class="roster-head"><span class="eyebrow">Fleet</span><span class="add" title="Add project" role="button" tabindex="0">+</span></div>
+      <nav class="stations">
+        <a class="station" href="index.html"><span class="lamp" data-state="working"></span><span class="who"><span class="repo">payments-service</span><span class="op working">authoring PR · 0:42<span class="cur"></span></span></span><span class="host">GH</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="reviewing"></span><span class="who"><span class="repo">marketing-site</span><span class="op reviewing">reviewing PR #54</span></span><span class="host">GL</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="attention"></span><span class="who"><span class="repo">internal-dashboard</span><span class="op attention">3 issues need you</span></span><span class="host">GH</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="clear"></span><span class="who"><span class="repo">mobile-api</span><span class="op idle">all clear</span></span><span class="host">GH</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="idle"></span><span class="who"><span class="repo">data-pipeline</span><span class="op idle">paused</span></span><span class="host">GL</span></a>
+        <a class="station" href="index.html"><span class="lamp" data-state="clear"></span><span class="who"><span class="repo">docs-portal</span><span class="op idle">docs synced 2h ago</span></span><span class="host">GL</span></a>
+      </nav>
+      <div class="roster-foot"><span>6 stations</span><span>all hosts <b>online</b></span></div>
+    </aside>
+
+    <main class="console">
+      <div class="console-head">
+        <div class="crumb">fleet / <span class="here">settings</span></div>
+        <div class="title-row"><h1>Settings</h1></div>
+        <p class="desc">Global defaults for every project. Each project can override its hosts, keys, and model roles from its own settings.</p>
+      </div>
+
+      <div class="console-body">
+        <div class="settings-wrap">
+
+          <section class="set-grp">
+            <div class="sect"><h2>Source hosts</h2><span class="rule"></span></div>
+            <p class="gdesc">Where your repositories live. Tokens need repo, pull request, and issue access.</p>
+            <div class="field">
+              <label for="gh">GitHub token</label>
+              <input id="gh" type="password" value="ghp_a1b2c3d4e5f6g7h8i9j0">
+            </div>
+            <div class="field">
+              <label for="gl">GitLab token</label>
+              <input id="gl" type="password" value="glpat_x9y8z7w6v5u4">
+            </div>
+          </section>
+
+          <section class="set-grp">
+            <div class="sect"><h2>Model providers</h2><span class="rule"></span></div>
+            <p class="gdesc">API keys for the model providers your agents call. Add a base URL only if you route through a gateway.</p>
+            <div class="field">
+              <label for="anth">Anthropic API key</label>
+              <input id="anth" type="password" value="sk-ant-api03-abc123">
+            </div>
+            <div class="field">
+              <label for="anthurl">Anthropic base URL</label>
+              <input id="anthurl" type="text" placeholder="https://api.anthropic.com  (leave blank for default)">
+            </div>
+            <div class="field">
+              <label for="oai">OpenAI API key</label>
+              <input id="oai" type="password" placeholder="optional">
+            </div>
+          </section>
+
+          <section class="set-grp">
+            <div class="sect"><h2>Model roles</h2><span class="rule"></span></div>
+            <p class="gdesc">Pick which model does each job. Coding does the heavy lifting; lighter models keep review and docs cheap.</p>
+            <div class="field">
+              <label for="r-code">Writing code</label>
+              <select id="r-code"><option>claude-opus-4-8</option><option>claude-sonnet-4-6</option><option>claude-haiku-4-5</option></select>
+            </div>
+            <div class="field">
+              <label for="r-review">Reviewing code</label>
+              <select id="r-review"><option>claude-sonnet-4-6</option><option>claude-opus-4-8</option><option>claude-haiku-4-5</option></select>
+            </div>
+            <div class="field">
+              <label for="r-arch">Architecture review</label>
+              <select id="r-arch"><option>claude-opus-4-8</option><option>claude-sonnet-4-6</option></select>
+            </div>
+            <div class="field">
+              <label for="r-docs">Writing documentation</label>
+              <select id="r-docs"><option>claude-haiku-4-5</option><option>claude-sonnet-4-6</option></select>
+            </div>
+            <div class="role-note">payments-service overrides these — it uses claude-opus-4-8 for review too. Open the project's settings to change its overrides.</div>
+          </section>
+
+          <div class="set-actions">
+            <a class="btn ghost" href="index.html">Cancel</a>
+            <button class="btn primary">Save changes</button>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
