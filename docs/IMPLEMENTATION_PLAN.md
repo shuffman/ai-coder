@@ -74,7 +74,7 @@ API calls, so the UX can be reviewed and refined.
 
 ---
 
-### Milestone 2 — Real read-only data  *(code complete; pending real-token verification)*
+### ✅ Milestone 2 — Real read-only data  *(complete)*
 
 Goal: replace mock data with **real, read-only** data for connected repos.
 No agent actions yet — just prove the host integration and data plumbing.
@@ -94,10 +94,12 @@ URL-encoded `path_with_namespace`; both support a configurable base URL
 - [x] Loading and error states for network calls
 - [x] **Verified against a real GitLab account** — token encrypted, repos
       paginate fully, projects add and render real data
-- [ ] Background refresh / polling for project status
 
-**Exit criteria:** a real repo appears in the roster with its actual open issues
-and PRs; no writes occur.
+**Exit criteria:** met — a real repo appears in the roster with its actual open
+issues and PRs; no writes occur.
+
+*Deferred out of M2:* background refresh / polling for project status (moved to
+M4 alongside the always-on agent loop).
 
 ---
 
@@ -134,6 +136,7 @@ Goal: the autonomous behaviors described in the product vision.
 - [ ] Per-role model routing actually drives which provider/model each task uses
 - [ ] Guardrails: budget caps that pause a project, "needs your call" gating,
       approval prompts for irreversible actions
+- [ ] Background refresh / polling for project status *(deferred from M2)*
 
 **Exit criteria:** a project can run unattended within its budget, surfacing only
 the decisions that need a human.
