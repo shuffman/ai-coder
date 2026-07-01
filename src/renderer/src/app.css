@@ -1147,6 +1147,71 @@ input.provider-name {
   color: var(--working);
 }
 
+/* ---- agent run panel ---- */
+.run-title {
+  color: var(--dim);
+  font-weight: 400;
+  font-family: var(--body);
+  font-size: 14px;
+}
+.run-meta {
+  display: flex;
+  gap: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  margin-bottom: 12px;
+}
+.run-meta b {
+  color: var(--text);
+  font-weight: 600;
+}
+.run-meta .run-cost {
+  color: var(--reviewing);
+}
+.run-log {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.5;
+  background: var(--ink);
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  padding: 12px 14px;
+  height: 300px;
+  overflow-y: auto;
+}
+.log-line {
+  padding: 2px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.log-line.info {
+  color: var(--faint);
+}
+.log-line.agent {
+  color: var(--text);
+}
+.log-line.tool {
+  color: var(--reviewing);
+}
+.log-line.result {
+  color: var(--clear);
+}
+.log-line.error {
+  color: var(--attention);
+}
+.run-pr {
+  display: inline-block;
+  margin-top: 16px;
+  text-decoration: none;
+}
+.fix-btn {
+  display: block;
+  margin-top: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
 /* ---- responsive + reduced motion ---- */
 @media (max-width: 860px) {
   .roster {

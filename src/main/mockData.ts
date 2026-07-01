@@ -8,7 +8,7 @@ import type {
   ActivityEntry
 } from '../shared/types'
 
-export const projects: Project[] = [
+const demoList: Project[] = [
   {
     id: 'payments-service',
     name: 'payments-service',
@@ -67,6 +67,8 @@ export const projects: Project[] = [
     operation: 'Docs synced 2h ago'
   }
 ]
+
+export const projects: Project[] = demoList.map((p) => ({ ...p, demo: true }))
 
 const issuesByProject: Record<string, Issue[]> = {
   'payments-service': [

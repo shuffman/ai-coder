@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import type {
   ActivityEntry,
+  AgentRun,
   Issue,
   Project,
   ProjectCosts,
@@ -10,6 +11,7 @@ import type {
 import { CommandBar } from './components/CommandBar'
 import { Roster } from './components/Roster'
 import { AddProject } from './components/AddProject'
+import { RunPanel } from './components/RunPanel'
 import { ProjectHeader, type Tab } from './components/ProjectHeader'
 import { Overview } from './components/views/Overview'
 import { Issues } from './components/views/Issues'
@@ -38,6 +40,7 @@ export default function App(): React.ReactElement {
   const [activity, setActivity] = useState<ActivityEntry[]>([])
   const [dataError, setDataError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [activeRun, setActiveRun] = useState<AgentRun | null>(null)
 
   // Tag the body so CSS can offset the macOS traffic lights.
   useEffect(() => {
@@ -88,6 +91,26 @@ export default function App(): React.ReactElement {
       cancelled = true
     }
   }, [currentId])
+
+  // Live agent-run updates from the main process.
+  useEffect(() => {
+    const unsub = window.aicoder.onRunUpdate((run) => {
+      setActiveRun((prev) => (prev && prev.id === run.id ? run : prev))
+      if (run.status === 'succeeded' && run.projectId === currentId) {
+        void (async () => {
+          setIssues(await window.aicoder.getIssues(currentId))
+          setPulls(await window.aicoder.getPullRequests(currentId))
+        })()
+      }
+    })
+    return unsub
+  }, [currentId])
+
+  async function startFix(issue: Issue): Promise<void> {
+    if (!currentId) return
+    const run = await window.aicoder.startRun(currentId, issue.id, issue.title)
+    setActiveRun(run)
+  }
 
   async function refreshProjects(selectId?: string): Promise<void> {
     const ps = await window.aicoder.getProjects()
@@ -149,7 +172,12 @@ export default function App(): React.ReactElement {
                   activity={activity}
                 />
               )}
-              {tab === 'issues' && <Issues issues={issues} />}
+              {tab === 'issues' && (
+                <Issues
+                  issues={issues}
+                  onFix={current && !current.demo ? (i) => void startFix(i) : undefined}
+                />
+              )}
               {tab === 'pulls' && <Pulls pulls={pulls} />}
               {tab === 'costs' && <Costs costs={costs} />}
             </div>
@@ -169,6 +197,13 @@ export default function App(): React.ReactElement {
             setAddOpen(false)
             void refreshProjects(project.id)
           }}
+        />
+      )}
+      {activeRun && (
+        <RunPanel
+          run={activeRun}
+          onCancel={() => void window.aicoder.cancelRun(activeRun.id)}
+          onClose={() => setActiveRun(null)}
         />
       )}
     </>

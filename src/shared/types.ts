@@ -29,6 +29,8 @@ export interface Project {
   branch?: string
   /** Seconds the current operation has been running, if active. */
   elapsedSeconds?: number
+  /** True for the built-in demo fleet (no real host behind it). */
+  demo?: boolean
 }
 
 export interface Issue {
@@ -138,6 +140,39 @@ export interface ConnectionStatus {
   baseUrl: string
 }
 
+// ── Agent runs (Milestone 3) ─────────────────────────────────────────────────
+
+export type RunStatus =
+  | 'queued'
+  | 'preparing' // cloning / branching
+  | 'working' // agent editing code
+  | 'pushing'
+  | 'opening-pr'
+  | 'succeeded'
+  | 'failed'
+  | 'cancelled'
+
+export interface RunLogLine {
+  ts: number
+  kind: 'info' | 'agent' | 'tool' | 'error' | 'result'
+  text: string
+}
+
+export interface AgentRun {
+  id: string
+  projectId: string
+  issueId: string
+  issueTitle: string
+  branch: string
+  status: RunStatus
+  logs: RunLogLine[]
+  costUsd: number
+  prUrl?: string
+  error?: string
+  startedAt: number
+  endedAt?: number
+}
+
 /** The shape exposed to the renderer over the preload bridge. */
 export interface AiCoderApi {
   getProjects: () => Promise<Project[]>
@@ -155,4 +190,11 @@ export interface AiCoderApi {
   listRepos: (host: GitHost) => Promise<HostRepo[]>
   addProject: (host: GitHost, key: string) => Promise<Project>
   removeProject: (id: string) => Promise<void>
+
+  // Agent runs (Milestone 3)
+  startRun: (projectId: string, issueId: string, issueTitle: string) => Promise<AgentRun>
+  cancelRun: (runId: string) => Promise<void>
+  listRuns: (projectId: string) => Promise<AgentRun[]>
+  /** Subscribe to live run updates; returns an unsubscribe function. */
+  onRunUpdate: (cb: (run: AgentRun) => void) => () => void
 }

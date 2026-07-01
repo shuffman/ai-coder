@@ -13,5 +13,10 @@ export const IPC = {
   clearConnection: 'connections:clear',
   listRepos: 'hosts:listRepos',
   addProject: 'projects:add',
-  removeProject: 'projects:remove'
+  removeProject: 'projects:remove',
+  // Agent runs (Milestone 3)
+  startRun: 'runs:start',
+  cancelRun: 'runs:cancel',
+  listRuns: 'runs:list',
+  runUpdate: 'runs:update' // main → renderer push
 } as const

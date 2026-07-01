@@ -7,6 +7,8 @@ import * as projects from './projects'
 import { getSettings, saveSettings } from './store'
 import { clearConnection, getBaseUrl, listConnections, saveConnection } from './connections'
 import { adapterFor, makeAdapter } from './hosts'
+import { runManager } from './engine/runManager'
+import type { AgentRun } from '../shared/types'
 
 function createWindow(): void {
   const win = new BrowserWindow({
@@ -76,6 +78,20 @@ function registerIpc(): void {
   })
   ipcMain.handle(IPC.addProject, (_e, host: GitHost, key: string) => projects.addProject(host, key))
   ipcMain.handle(IPC.removeProject, (_e, id: string) => projects.removeProject(id))
+
+  // Agent runs (Milestone 3)
+  ipcMain.handle(IPC.startRun, (_e, projectId: string, issueId: string, issueTitle: string) =>
+    runManager.start(projectId, issueId, issueTitle)
+  )
+  ipcMain.handle(IPC.cancelRun, (_e, runId: string) => runManager.cancel(runId))
+  ipcMain.handle(IPC.listRuns, (_e, projectId: string) => runManager.list(projectId))
+
+  // Push live run updates to every renderer window.
+  runManager.on('update', (run: AgentRun) => {
+    for (const win of BrowserWindow.getAllWindows()) {
+      win.webContents.send(IPC.runUpdate, run)
+    }
+  })
 }
 
 app.whenReady().then(() => {

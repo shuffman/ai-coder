@@ -1,5 +1,5 @@
 import type { HostRepo, Issue, PullRequest } from '../../shared/types'
-import type { GitHostAdapter, RepoMeta } from './types'
+import type { GitHostAdapter, NewPullRequest, RepoMeta } from './types'
 import { ago, ensureOk } from './util'
 
 /** GitHub (github.com or Enterprise) via the REST API. `key` is "owner/repo". */
@@ -65,7 +65,23 @@ export class GitHubAdapter implements GitHostAdapter {
 
   async getRepo(key: string): Promise<RepoMeta> {
     const r = await this.get<GhRepo>(`/repos/${key}`)
-    return { fullName: r.full_name, description: r.description ?? '', defaultBranch: r.default_branch }
+    return {
+      fullName: r.full_name,
+      description: r.description ?? '',
+      defaultBranch: r.default_branch,
+      cloneUrl: r.clone_url ?? `https://github.com/${key}.git`
+    }
+  }
+
+  async createPullRequest(key: string, pr: NewPullRequest): Promise<string> {
+    const res = await fetch(`${this.apiBase.replace(/\/$/, '')}/repos/${key}/pulls`, {
+      method: 'POST',
+      headers: { ...this.headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: pr.title, body: pr.body, head: pr.head, base: pr.base })
+    })
+    await ensureOk(res, `GitHub open PR`)
+    const created = (await res.json()) as { html_url: string }
+    return created.html_url
   }
 
   async listIssues(key: string): Promise<Issue[]> {
@@ -104,6 +120,7 @@ interface GhRepo {
   full_name: string
   default_branch: string
   description: string | null
+  clone_url?: string
 }
 interface GhIssue {
   number: number

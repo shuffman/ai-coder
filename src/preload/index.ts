@@ -1,6 +1,6 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 import { IPC } from '../shared/ipc'
-import type { AiCoderApi, GitHost, Settings } from '../shared/types'
+import type { AgentRun, AiCoderApi, GitHost, Settings } from '../shared/types'
 
 const api: AiCoderApi = {
   getProjects: () => ipcRenderer.invoke(IPC.getProjects),
@@ -17,7 +17,17 @@ const api: AiCoderApi = {
   clearConnection: (host: GitHost) => ipcRenderer.invoke(IPC.clearConnection, host),
   listRepos: (host: GitHost) => ipcRenderer.invoke(IPC.listRepos, host),
   addProject: (host: GitHost, key: string) => ipcRenderer.invoke(IPC.addProject, host, key),
-  removeProject: (id: string) => ipcRenderer.invoke(IPC.removeProject, id)
+  removeProject: (id: string) => ipcRenderer.invoke(IPC.removeProject, id),
+
+  startRun: (projectId: string, issueId: string, issueTitle: string) =>
+    ipcRenderer.invoke(IPC.startRun, projectId, issueId, issueTitle),
+  cancelRun: (runId: string) => ipcRenderer.invoke(IPC.cancelRun, runId),
+  listRuns: (projectId: string) => ipcRenderer.invoke(IPC.listRuns, projectId),
+  onRunUpdate: (cb: (run: AgentRun) => void) => {
+    const listener = (_e: IpcRendererEvent, run: AgentRun): void => cb(run)
+    ipcRenderer.on(IPC.runUpdate, listener)
+    return () => ipcRenderer.removeListener(IPC.runUpdate, listener)
+  }
 }
 
 contextBridge.exposeInMainWorld('aicoder', api)

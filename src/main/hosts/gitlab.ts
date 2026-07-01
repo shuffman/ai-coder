@@ -1,5 +1,5 @@
 import type { HostRepo, Issue, PullRequest } from '../../shared/types'
-import type { GitHostAdapter, RepoMeta } from './types'
+import type { GitHostAdapter, NewPullRequest, RepoMeta } from './types'
 import { ago, ensureOk } from './util'
 
 /**
@@ -73,8 +73,25 @@ export class GitLabAdapter implements GitHostAdapter {
     return {
       fullName: p.path_with_namespace,
       description: p.description ?? '',
-      defaultBranch: p.default_branch ?? 'main'
+      defaultBranch: p.default_branch ?? 'main',
+      cloneUrl: p.http_url_to_repo ?? `${this.base.replace(/\/$/, '')}/${p.path_with_namespace}.git`
     }
+  }
+
+  async createPullRequest(key: string, pr: NewPullRequest): Promise<string> {
+    const res = await fetch(`${this.apiBase}/projects/${key}/merge_requests`, {
+      method: 'POST',
+      headers: { ...this.headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source_branch: pr.head,
+        target_branch: pr.base,
+        title: pr.title,
+        description: pr.body
+      })
+    })
+    await ensureOk(res, `GitLab open MR`)
+    const created = (await res.json()) as { web_url: string }
+    return created.web_url
   }
 
   async listIssues(key: string): Promise<Issue[]> {
@@ -110,6 +127,7 @@ interface GlProject {
   path_with_namespace: string
   default_branch: string | null
   description: string | null
+  http_url_to_repo?: string
 }
 interface GlIssue {
   iid: number

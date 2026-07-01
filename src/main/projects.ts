@@ -25,6 +25,10 @@ export function hasRealProjects(): boolean {
   return refs().length > 0
 }
 
+export function getRef(id: string): ProjectRef | undefined {
+  return findRef(id)
+}
+
 /** Map a stored ref to the UI Project shape. No agent runs yet (Milestone 2), so
  *  the lamp is idle and the operation is a neutral connected state. */
 function toProject(ref: ProjectRef): Project {

@@ -22,7 +22,13 @@ function rightLabel(issue: Issue): React.ReactNode {
   return 'queued'
 }
 
-function Row({ issue }: { issue: Issue }): React.ReactElement {
+function Row({
+  issue,
+  onFix
+}: {
+  issue: Issue
+  onFix?: (issue: Issue) => void
+}): React.ReactElement {
   const dot = DOT[issue.state]
   return (
     <article className="rec">
@@ -46,12 +52,25 @@ function Row({ issue }: { issue: Issue }): React.ReactElement {
           ))}
         </div>
       </span>
-      <span className="right">{rightLabel(issue)}</span>
+      <span className="right">
+        {rightLabel(issue)}
+        {onFix && (
+          <button className="btn fix-btn" onClick={() => onFix(issue)}>
+            Fix with agent
+          </button>
+        )}
+      </span>
     </article>
   )
 }
 
-export function Issues({ issues }: { issues: Issue[] }): React.ReactElement {
+export function Issues({
+  issues,
+  onFix
+}: {
+  issues: Issue[]
+  onFix?: (issue: Issue) => void
+}): React.ReactElement {
   const fixing = issues.filter((i) => i.state === 'fixing')
   const rest = issues.filter((i) => i.state !== 'fixing')
   return (
@@ -62,7 +81,7 @@ export function Issues({ issues }: { issues: Issue[] }): React.ReactElement {
       </div>
       <div className="records">
         {fixing.map((i) => (
-          <Row key={i.id} issue={i} />
+          <Row key={i.id} issue={i} onFix={onFix} />
         ))}
         {fixing.length === 0 && <Empty>No issues are being fixed right now.</Empty>}
       </div>
@@ -73,7 +92,7 @@ export function Issues({ issues }: { issues: Issue[] }): React.ReactElement {
       </div>
       <div className="records">
         {rest.map((i) => (
-          <Row key={i.id} issue={i} />
+          <Row key={i.id} issue={i} onFix={onFix} />
         ))}
         {rest.length === 0 && <Empty>Nothing else open. The agent is all caught up.</Empty>}
       </div>

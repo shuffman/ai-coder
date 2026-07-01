@@ -25,14 +25,9 @@ These are settled (see also `mockup/` for the agreed visual design):
 
 ## Open decisions (must resolve before the milestone that needs them)
 
-1. **Execution engine** *(blocks M3)* — what turns a model into a coding agent
-   (edits files, runs git, opens PRs). The Claude Agent SDK runs the agentic
-   loop on Anthropic models only and can use the Claude Plan; OpenAI-compatible
-   models cannot run through it. Options:
-   - **(a)** One provider-agnostic agent harness we build and maintain (works for
-     Anthropic *and* OpenAI-compatible).
-   - **(b)** Per-provider engines: Agent SDK for Anthropic/Claude Plan, a separate
-     loop for OpenAI-compatible.
+1. ~~**Execution engine**~~ — RESOLVED: **per-provider engines**, Claude Agent SDK
+   first (built in M3). OpenAI-compatible execution comes in M5 as a second engine
+   behind the same `AgentEngine` interface.
 2. ~~**First git host**~~ — RESOLVED: both GitHub and GitLab, behind one
    `GitHostAdapter` interface (built in M2).
 3. **Per-project overrides** *(M5)* — whether projects can override hosts,
@@ -103,21 +98,29 @@ M4 alongside the always-on agent loop).
 
 ---
 
-### Milestone 3 — First agent action (write path)
+### Milestone 3 — First agent action (write path)  *(code complete; pending live verification)*
 
 Goal: the coding agent does one real thing end to end on one provider.
 
-- [ ] Resolve open decision #1 (execution engine)
-- [ ] `AgentEngine` interface; first implementation (Claude Agent SDK on the
-      Claude Plan, since that's the default billing path)
-- [ ] **Claude Plan auth**: subscription login flow + secure token handling;
-      API-key fallback path
-- [ ] Agent run lifecycle: queue → working → output, surfaced as the live
-      operation readout and roster lamp states
-- [ ] One concrete capability: pick an issue → produce a fix → open a PR on a
-      branch (human reviews/merges manually)
-- [ ] Run logs viewable ("Watch live log"); ability to pause/cancel a run
-- [ ] Real cost/usage accounting wired into the Costs view
+Decision: **per-provider engines, Claude Agent SDK first** (`@anthropic-ai/claude-agent-sdk`,
+which bundles its own binary). The agent edits/commits locally; the **app** owns
+the push + PR so the token stays in controlled code. Subscription auth uses a
+`claude setup-token` (`CLAUDE_CODE_OAUTH_TOKEN`); API-key mode uses `ANTHROPIC_API_KEY`.
+
+- [x] `AgentEngine` interface + `ClaudeAgentEngine` (`src/main/engine/`)
+- [x] Host write path: `createPullRequest` on GitHub + GitLab adapters
+- [x] Git pipeline: shallow clone → branch → commit → push with an ephemeral
+      authenticated remote (`src/main/git.ts`)
+- [x] `RunManager`: queued → preparing → working → pushing → opening-pr →
+      succeeded/failed/cancelled, streamed to the renderer
+- [x] Claude Plan auth (setup token) + API-key fallback, resolved from the
+      coding role's provider
+- [x] One capability: pick an issue → agent fix → branch → **open a PR** (human merges)
+- [x] Live run panel with streamed logs + cancel
+- [ ] **Verify a real run** (needs a `claude setup-token` + a connected repo/issue)
+- [ ] Aggregate run cost/usage into the Costs view *(shown per-run today; deferred)*
+- [ ] Live roster lamp / overview readout during a real run *(deferred)*
+- [ ] Move provider secrets (setup token / API key) into `safeStorage` like host tokens *(follow-up)*
 
 **Exit criteria:** from the UI, hand the agent an issue and get a real PR back,
 running on the Claude Plan.
